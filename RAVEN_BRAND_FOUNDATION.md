@@ -1,4 +1,4 @@
-# RAVEN BRAND FOUNDATION
+# JRAVENS LAB BRAND FOUNDATION
 ## Permanent Identity & Strategy Reference
 *Generated April 2026 — Jennifer Raven / Sigmaringen, DE*
 
@@ -22,13 +22,13 @@
 
 ## DUAL-TRACK BUSINESS STRATEGY
 
-### Plan A — The Raven Alchemist (MenoBalance App)
+### Plan A — The Raven Alchemist (Morphea - Menopause App)
 - **Focus:** Cortisol alchemy, mindfulness, quantum biology for women in the "Meno-Morphosis" (Peri/Meno/Postmenopause)
-- **Market:** Germany-first, DiGA-ready (GKV reimbursement), CE IIa target
+- **Market:** Germany-first, 
 - **Strategy:** High automation, 2h/week maintenance target post-launch
 - **Metric:** Bio-Sovereignty and user frequency elevation
 - **Stack:** CBT · ACT · MBI, evidence-based (NAMS Level 1), AI-powered insights
-- **Differentiators:** Voice-tracking, Wearable integration (5+ devices), Doctor PDF export, On-device ML, DE-native
+- **Differentiators:** Voice-tracking, Wearable integration (5+ devices), Doctor PDF export, On-device ML, DE-native, Partner Support
 
 ### Plan B — The Raven Controller (AI Consultancy)
 - **Focus:** Automating the "Matrix" for small businesses, starting locally in Sigmaringen
@@ -60,7 +60,7 @@
 | Electric Amethyst | `#9370DB` | Energy, transformation, the mystical |
 
 ### Logo Concept
-Geometric Raven silhouette against a quantum interference pattern or circuit lines. Precision meets the mystical. Sharp edges, no softness.
+Raven silhouette against a quantum interference pattern or circuit lines. Precision meets the mystical. Sharp edges, no softness.
 
 ### Typography Direction (TBD in Brandboard)
 - Heading: Strong geometric serif or sharp sans — authority + intelligence
@@ -76,7 +76,7 @@ Geometric Raven silhouette against a quantum interference pattern or circuit lin
 
 ---
 
-## MENOBALANCE APP REFERENCE
+## MORPHEA APP REFERENCE
 
 ### Target Users (Personas)
 - **"Die Managerin" — Petra, 49:** Berufstätig, Hitzewallungen im Meeting, will Daten + Arzt-Bericht
@@ -86,7 +86,6 @@ Geometric Raven silhouette against a quantum interference pattern or circuit lin
 ### Clinical Framework
 - CBT (12-week core program), ACT, MBI
 - Validated scores: HFRS, PSQI, PHQ-8, MenQoL
-- DiGA-Ready (BfArM Fast-Track), CE IIa target
 - Evidence base: Caria RCT 2025, Frieda Menova Pilot 2025, NAMS Level 1
 
 ### Design System (App)
@@ -96,18 +95,18 @@ Geometric Raven silhouette against a quantum interference pattern or circuit lin
 
 ### Competitive Edge Over Rivals
 All rivals (Caria, Frieda Menova, MENO!, Health & Her, femfeel, Clue) address single aspects.
-MenoBalance is the only DE-native, fully evidence-based, DiGA-ready app combining:
-CBT program + validated tracking + AI insights + doctor PDF export + wearable integration + voice tracking
+Morphea is the only DE-native, fully evidence-based app combining:
+CBT program + validated tracking + AI insights + doctor PDF export + wearable integration + voice tracking + partner support
 
 ---
 
 ## CURRENT BUILD SEQUENCE
 
-1. **Brandboard** — Logo, fonts, full design system (Raven brand + MenoBalance sub-brand)
+1. **Brandboard** — Logo, fonts, full design system (JRavens Lab brand + Morphea sub-brand)
 2. **Keyword Strategy** — Automated marketing with Jennifer's voice/fingerprint
 3. **Landing Page** — Pre-launch, email capture, waitlist
 4. **App Development** — MVP → Beta → Launch
-5. **Deployment** — DiGA process, app stores, infrastructure
+5. **Deployment** — app stores, infrastructure
 6. **Ad Campaign** — Paid + organic, persona-targeted
 
 ---
