@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morphea — Die Meno-Morphosis App</title>
+<meta name="description" content="Morphea ist die erste evidenzbasierte App für Frauen in der Perimenopause, Menopause und Postmenopause. Deine biologische Souveränität beginnt hier.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --obsidian:      #0B0F19;
+    --obsidian-2:    #141929;
+    --obsidian-3:    #1E2640;
+    --forest:        #2D5A27;
+    --forest-light:  #3D7A35;
+    --amethyst:      #9370DB;
+    --amethyst-dark: #6B4EC8;
+    --amethyst-pale: rgba(147,112,219,0.12);
+    --plum:          #6B3F5E;
+    --plum-deep:     #4A2A41;
+    --terra:         #C8633A;
+    --terra-pale:    rgba(200,99,58,0.12);
+    --cream:         #FAF6F0;
+    --sage:          #7A9E7E;
+    --rose:          #C9848A;
+    --amber:         #D4A04A;
+    --white:         #FFFFFF;
+    --ink:           #1A1A2E;
+    --ink-mid:       #4A4A6A;
+    --ink-soft:      #8A8AAA;
+
+    --font-display:  'Cormorant Garamond', Georgia, serif;
+    --font-body:     'DM Sans', system-ui, sans-serif;
+    --font-mono:     'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--obsidian);
+    color: var(--white);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(11,15,25,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .nav-logo-text {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--white);
+    letter-spacing: 0.01em;
+  }
+
+  .nav-logo-text em {
+    font-style: italic;
+    color: var(--amethyst);
+  }
+
+  .nav-sub {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    display: block;
+    margin-top: 1px;
+  }
+
+  .nav-cta {
+    font-family: var(--font-body);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    background: rgba(147,112,219,0.2);
+    border: 1px solid rgba(147,112,219,0.4);
+    border-radius: 6px;
+    padding: 8px 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .nav-cta:hover {
+    background: rgba(147,112,219,0.35);
+    border-color: var(--amethyst);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8rem 2rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Radial glow backgrounds */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 900px; height: 900px;
+    background: radial-gradient(ellipse, rgba(147,112,219,0.15) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -100px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(45,90,39,0.1) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amethyst);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(56px, 9vw, 110px);
+    font-weight: 300;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--white);
+    margin-bottom: 0.3em;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.35s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--amethyst);
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.5s forwards;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    max-width: 520px;
+    margin: 0 auto 3rem;
+    line-height: 1.75;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.65s forwards;
+  }
+
+  /* Waitlist form */
+  .waitlist-form {
+    display: flex;
+    gap: 0;
+    max-width: 480px;
+    width: 100%;
+    margin: 0 auto 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.8s forwards;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(147,112,219,0.3), 0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .waitlist-input {
+    flex: 1;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.06);
+    border: none;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 14px;
+    outline: none;
+    backdrop-filter: blur(10px);
+  }
+
+  .waitlist-input::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+
+  .waitlist-btn {
+    padding: 16px 28px;
+    background: var(--terra);
+    border: none;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+  }
+
+  .waitlist-btn:hover {
+    background: #D4703F;
+  }
+
+  .hero-microcopy {
+    font-size: 12px;
+    color: rgba(255,255,255,0.25);
+    font-family: var(--font-mono);
+    letter-spacing: 0.06em;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 0.95s forwards;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s ease 1.1s forwards;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat-num {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--amethyst);
+    line-height: 1;
+    display: block;
+  }
+
+  .hero-stat-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* ─── SCROLL INDICATOR ─── */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.5s forwards;
+  }
+
+  .scroll-hint span {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, rgba(147,112,219,0.6), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+
+  /* ─── SECTION: PROBLEM ─── */
+  .section-problem {
+    padding: 8rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--amethyst);
+    margin-bottom: 1.5rem;
+  }
+
+  .problem-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .problem-left h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  .problem-left h2 em {
+    font-style: italic;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .problem-left p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+  }
+
+  .stat-card:hover {
+    border-color: rgba(147,112,219,0.3);
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(147,112,219,0.5), transparent);
+  }
+
+  .stat-card-num {
+    font-family: var(--font-display);
+    font-size: 48px;
+    font-weight: 300;
+    color: var(--amethyst);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-card-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.6;
+  }
+
+  .stat-card-source {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.2);
+    margin-top: 0.5rem;
+    display: block;
+  }
+
+  /* ─── SECTION: TRANSFORMATION ─── */
+  .section-transform {
+    padding: 8rem 2rem;
+    background: linear-gradient(135deg, rgba(107,63,94,0.08) 0%, transparent 60%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-transform::before {
+    content: '';
+    position: absolute;
+    right: -200px; top: 50%;
+    transform: translateY(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(200,99,58,0.06) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .transform-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .transform-header {
+    text-align: center;
+    margin-bottom: 5rem;
+  }
+
+  .transform-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5.5vw, 64px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .transform-header h2 em {
+    font-style: italic;
+    color: var(--terra);
+  }
+
+  .transform-header p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.4);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .feature-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .feature-card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(147,112,219,0.25);
+    transform: translateY(-3px);
+  }
+
+  .feature-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 1.25rem;
+  }
+
+  .feature-icon-amethyst { background: rgba(147,112,219,0.15); }
+  .feature-icon-terra { background: rgba(200,99,58,0.15); }
+  .feature-icon-forest { background: rgba(45,90,39,0.2); }
+  .feature-icon-rose { background: rgba(201,132,138,0.15); }
+  .feature-icon-amber { background: rgba(212,160,74,0.15); }
+  .feature-icon-sage { background: rgba(122,158,126,0.15); }
+
+  .feature-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 0.6rem;
+    line-height: 1.2;
+  }
+
+  .feature-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.7;
+  }
+
+  .feature-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: rgba(147,112,219,0.15);
+    color: var(--amethyst);
+    margin-top: 1rem;
+  }
+
+  .feature-tag-terra {
+    background: rgba(200,99,58,0.15);
+    color: var(--terra);
+  }
+
+  .feature-tag-forest {
+    background: rgba(45,90,39,0.2);
+    color: var(--sage);
+  }
+
+  /* ─── SECTION: PERSONAS ─── */
+  .section-personas {
+    padding: 8rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .personas-header {
+    margin-bottom: 4rem;
+  }
+
+  .personas-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+  }
+
+  .personas-header h2 em {
+    font-style: italic;
+    color: var(--amethyst);
+  }
+
+  .personas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .persona-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s ease;
+  }
+
+  .persona-card:hover {
+    border-color: rgba(147,112,219,0.3);
+  }
+
+  .persona-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--amethyst), var(--terra));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .persona-card:hover::after {
+    opacity: 1;
+  }
+
+  .persona-age {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--amethyst);
+    margin-bottom: 0.75rem;
+  }
+
+  .persona-name {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+
+  .persona-role {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 1.5rem;
+  }
+
+  .persona-quote {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-style: italic;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    border-left: 2px solid rgba(147,112,219,0.4);
+    padding-left: 1rem;
+  }
+
+  .persona-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .persona-tag {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ─── SECTION: EVIDENCE ─── */
+  .section-evidence {
+    padding: 8rem 2rem;
+    background: rgba(45,90,39,0.05);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .evidence-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .evidence-left h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4.5vw, 52px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  .evidence-left h2 em {
+    font-style: italic;
+    color: var(--sage);
+  }
+
+  .evidence-left p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .evidence-sources {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .evidence-source {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .evidence-source-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--sage);
+    flex-shrink: 0;
+  }
+
+  .outcomes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .outcome-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+
+  .outcome-num {
+    font-family: var(--font-display);
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .outcome-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.5;
+  }
+
+  /* ─── SECTION: HOW IT WORKS ─── */
+  .section-how {
+    padding: 8rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-how h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    color: var(--white);
+    margin-bottom: 4rem;
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .section-how h2 em {
+    font-style: italic;
+    color: var(--terra);
+  }
+
+  .steps {
+    position: relative;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    left: 28px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--amethyst), var(--terra), transparent);
+    opacity: 0.3;
+  }
+
+  .step {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    align-items: start;
+  }
+
+  .step-num {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(147,112,219,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--amethyst);
+    background: var(--obsidian);
+    flex-shrink: 0;
+  }
+
+  .step-content h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--white);
+    margin-bottom: 0.5rem;
+    padding-top: 12px;
+  }
+
+  .step-content p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.75;
+  }
+
+  /* ─── SECTION: PRICING ─── */
+  .section-pricing {
+    padding: 8rem 2rem;
+    background: linear-gradient(180deg, transparent 0%, rgba(107,63,94,0.05) 50%, transparent 100%);
+  }
+
+  .pricing-inner {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .pricing-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .pricing-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .pricing-header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .price-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    transition: all 0.3s ease;
+  }
+
+  .price-card:hover {
+    border-color: rgba(147,112,219,0.2);
+  }
+
+  .price-card.featured {
+    background: rgba(107,63,94,0.15);
+    border-color: rgba(147,112,219,0.4);
+    position: relative;
+  }
+
+  .price-card.featured::before {
+    content: 'EMPFOHLEN';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    padding: 4px 14px;
+    background: var(--amethyst);
+    border-radius: 20px;
+    color: var(--white);
+  }
+
+  .price-tier {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 1rem;
+  }
+
+  .price-amount {
+    font-family: var(--font-display);
+    font-size: 42px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+  }
+
+  .price-amount span {
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+  }
+
+  .price-period {
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    margin-bottom: 1.75rem;
+  }
+
+  .price-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    margin-bottom: 1.75rem;
+  }
+
+  .price-features {
+    list-style: none;
+    margin-bottom: 2rem;
+  }
+
+  .price-features li {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    padding: 6px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .price-features li::before {
+    content: '→';
+    color: var(--amethyst);
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .price-cta {
+    display: block;
+    width: 100%;
+    padding: 13px;
+    text-align: center;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+
+  .price-cta-secondary {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .price-cta-secondary:hover {
+    background: rgba(255,255,255,0.1);
+    color: var(--white);
+  }
+
+  .price-cta-primary {
+    background: var(--terra);
+    color: var(--white);
+  }
+
+  .price-cta-primary:hover {
+    background: #D4703F;
+  }
+
+  /* ─── SECTION: WAITLIST CTA ─── */
+  .section-cta {
+    padding: 10rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-cta::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(ellipse, rgba(147,112,219,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .cta-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .cta-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amethyst);
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 70px);
+    font-weight: 300;
+    line-height: 1.0;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-title em {
+    font-style: italic;
+    color: var(--amethyst);
+  }
+
+  .cta-sub {
+    font-size: 15px;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.8;
+    margin-bottom: 3rem;
+    font-weight: 300;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-left {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.2);
+    line-height: 1.8;
+    text-transform: uppercase;
+  }
+
+  .footer-right {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(255,255,255,0.15);
+  }
+
+
+  /* ─── SECTION: PARTNER ─── */
+  .section-partner {
+    padding: 8rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-partner::before {
+    content: '';
+    position: absolute;
+    left: -200px; top: 50%;
+    transform: translateY(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(201,132,138,0.07) 0%, transparent 65%);
+    pointer-events: none;
+  }
+
+  .partner-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .partner-left h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+  }
+
+  .partner-left h2 em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  .partner-left p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.85;
+    margin-bottom: 1.5rem;
+  }
+
+  .partner-quote {
+    border-left: 2px solid rgba(201,132,138,0.4);
+    padding-left: 1.1rem;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+
+  .partner-notify-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,132,138,0.2);
+    border-radius: 20px;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .partner-notify-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,132,138,0.5), transparent);
+  }
+
+  .partner-notify-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.5rem;
+  }
+
+  .partner-notify-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(201,132,138,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .partner-notify-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.1;
+  }
+
+  .partner-notify-sub {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-top: 2px;
+  }
+
+  .partner-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .partner-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .partner-step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,132,138,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--rose);
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-family: var(--font-mono);
+  }
+
+  .partner-step-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+  }
+
+  .partner-step-text strong {
+    color: rgba(255,255,255,0.8);
+  }
+
+  .interval-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 1rem;
+  }
+
+  .interval-pill {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid rgba(201,132,138,0.3);
+    color: var(--rose);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .interval-pill:hover,
+  .interval-pill.active {
+    background: rgba(201,132,138,0.15);
+    border-color: var(--rose);
+  }
+
+  .partner-preview-msg {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .partner-preview-label {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 0.75rem;
+  }
+
+  .partner-msg-bubble {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px 12px 12px 3px;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .partner-msg-from {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rose);
+    margin-bottom: 0.4rem;
+  }
+
+  .partner-msg-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  .partner-msg-tip {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.6;
+  }
+
+  .partner-msg-tip strong {
+    color: var(--sage);
+  }
+
+  @media (max-width: 768px) {
+    .partner-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .pricing-grid { grid-template-columns: 1fr !important; }
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.6; transform: scaleY(1); }
+    50% { opacity: 0.2; transform: scaleY(0.7); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── SUCCESS STATE ─── */
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(45,90,39,0.15);
+    border: 1px solid rgba(122,158,126,0.3);
+    border-radius: 10px;
+    max-width: 480px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .form-success.visible {
+    display: block;
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  .form-success p {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-style: italic;
+    color: var(--sage);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .problem-split { grid-template-columns: 1fr; gap: 3rem; }
+    .features-grid { grid-template-columns: 1fr; }
+    .personas-grid { grid-template-columns: 1fr; }
+    .evidence-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .outcomes-grid { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 2rem; }
+    .steps::before { display: none; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <!-- Raven Mark SVG -->
+    <svg class="nav-logo-mark" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" stroke="#9370DB" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="22" cy="22" r="13" stroke="#9370DB" stroke-width="0.3" opacity="0.2"/>
+      <polygon points="22,6 30,18 26,20 28,30 22,26 16,30 18,20 14,18" fill="#C9848A" opacity="0.9"/>
+      <polygon points="14,18 6,24 10,28 18,20" fill="#C9848A" opacity="0.55"/>
+      <polygon points="30,18 38,24 34,28 26,20" fill="#C9848A" opacity="0.55"/>
+      <polygon points="22,6 26,12 22,14 18,12" fill="#FAF6F0"/>
+      <circle cx="23" cy="10" r="1.2" fill="#9370DB"/>
+      <line x1="22" y1="30" x2="22" y2="38" stroke="#9370DB" stroke-width="0.8" opacity="0.6"/>
+      <line x1="18" y1="34" x2="26" y2="34" stroke="#9370DB" stroke-width="0.6" opacity="0.4"/>
+      <circle cx="22" cy="38" r="1.5" fill="#9370DB" opacity="0.7"/>
+      <circle cx="18" cy="34" r="1" fill="#9370DB" opacity="0.5"/>
+      <circle cx="26" cy="34" r="1" fill="#9370DB" opacity="0.5"/>
+    </svg>
+    <div>
+      <div class="nav-logo-text">Mor<em>phea</em></div>
+      <span class="nav-sub">by JRavens Lab</span>
+    </div>
+  </a>
+  <a href="#waitlist" class="nav-cta">Auf Warteliste</a>
+</nav>
+
+<!-- ══ HERO ══════════════════════════════════════════ -->
+<section class="hero" id="top">
+  <div class="hero-eyebrow">JRavens Lab · Launch 2026</div>
+
+  <h1 class="hero-title">
+    Die Meno-<br><em>Morphosis</em>
+  </h1>
+
+  <p class="hero-subtitle">Dein Körper. Dein Code. Deine Souveränität.</p>
+
+  <p class="hero-desc">
+    Morphea ist die erste evidenzbasierte App für Frauen in der Peri-, Meno- und Postmenopause die alle Symptomebenen in einem System vereint — Tracking, CBT-Programm, KI-Insights und Partner-Benachrichtigung.
+  </p>
+
+  <div class="waitlist-form" id="hero-form">
+    <input type="email" class="waitlist-input" placeholder="deine@email.de" id="hero-email">
+    <button class="waitlist-btn" onclick="joinWaitlist('hero-email', 'hero-success')">Jetzt vormerken →</button>
+  </div>
+  <div class="form-success" id="hero-success">
+    <p>🖤 Du bist dabei. Die Morphosis beginnt.</p>
+  </div>
+
+  <p class="hero-microcopy">Kostenlos · Kein Spam · Keine Verpflichtung · Datenschutz</p>
+
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-num">11,5M</span>
+      <span class="hero-stat-label">Frauen in DE betroffen</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">72%</span>
+      <span class="hero-stat-label">ohne ausreichende Hilfe</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">−35%</span>
+      <span class="hero-stat-label">Symptomreduktion (Ziel)</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">12W</span>
+      <span class="hero-stat-label">CBT-Kernprogramm</span>
+    </div>
+  </div>
+
+  <p style="font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.2); margin-top:3rem; opacity:0; animation: fadeIn 1s ease 1.3s forwards;">
+    Kein Kurs. Kein Supplement. Eine App die wirklich versteht.
+  </p>
+
+  <div class="scroll-hint">
+    <span>Mehr erfahren</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ SECTION: PROBLEM ══════════════════════════════ -->
+<section class="section-problem">
+  <div class="problem-split reveal">
+    <div class="problem-left">
+      <p class="section-label">Das Problem</p>
+      <h2>Die Medizin nennt es<br><em>Störung.</em><br>Wir nennen es Wandel.</h2>
+      <p>
+        Die Medizin behandelt die Wechseljahre wie eine Erkrankung. Durchschnittlich 3–6 Wochen Wartezeit beim Gynäkologen. 8 Minuten Beratungszeit. Dann wird eine Tablette verschrieben — oder gar nichts. Morphea ist der Gegenentwurf.
+      </p>
+    </div>
+    <div class="problem-right">
+      <div class="stat-card">
+        <div class="stat-card-num">3–6W</div>
+        <div class="stat-card-text">Durchschnittliche Wartezeit beim Gynäkologen in Deutschland</div>
+        <span class="stat-card-source">Quelle: Versorgungsatlas DE</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num">&lt;8 Min</div>
+        <div class="stat-card-text">Durchschnittliche Konsultationszeit für Menopause-Beschwerden</div>
+        <span class="stat-card-source">Quelle: KBV Gesundheitsatlas</span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num">0</div>
+        <div class="stat-card-text">Apps die Tracking, CBT-Programm, KI-Insights UND Partner-Benachrichtigung vereinen — bisher.</div>
+        <span class="stat-card-source">Stand: April 2026</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION: FEATURES ════════════════════════════ -->
+<section class="section-transform">
+  <div class="transform-inner">
+    <div class="transform-header reveal">
+      <p class="section-label">Was Morphea kann</p>
+      <h2>Nicht eine App.<br>Ein <em>System.</em></h2>
+      <p>Alle klinisch relevanten Interventionsebenen in einem kohärenten, empathisch gestalteten Produkt.</p>
+    </div>
+
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-amethyst">🧠</div>
+        <div class="feature-title">12-Wochen CBT-Programm</div>
+        <div class="feature-desc">Kognitive Verhaltenstherapie mit Level-1-Evidenz (NAMS). Reduziert Hitzewallungen, verbessert Schlaf, stabilisiert Stimmung — klinisch nachgewiesen.</div>
+        <span class="feature-tag">NAMS Level 1</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-terra">📊</div>
+        <div class="feature-title">Präzises Symptom-Tracking</div>
+        <div class="feature-desc">HFRS-validiertes Hitzewall-Tagebuch. Stimmungs-Tracker. Schlafqualität. Zyklus. Voice-Input. Widget-Log in 30 Sekunden — direkt aus dem Sperrbildschirm.</div>
+        <span class="feature-tag feature-tag-terra">HFRS-validiert</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-amethyst">⚡</div>
+        <div class="feature-title">KI-Mustererkennung</div>
+        <div class="feature-desc">On-device ML identifiziert deine persönlichen Trigger. "Hitzewallungen +40% an Tagen mit Koffein." Deine Daten. Dein Gerät. Nie in der Cloud.</div>
+        <span class="feature-tag">On-Device KI</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-forest">🩺</div>
+        <div class="feature-title">Arzt-Bericht Export</div>
+        <div class="feature-desc">Strukturierter PDF-Bericht mit validierten Scores (HFRS, PHQ-8, PSQI, MenQoL) — optimiert für das Arztgespräch. Konsultationszeit um 30% reduziert.</div>
+        <span class="feature-tag feature-tag-forest">Shared Decision-Making</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-rose">⌚</div>
+        <div class="feature-title">Wearable-Integration</div>
+        <div class="feature-desc">Apple Health, Oura Ring, Garmin, Fitbit, Google Fit. Schlafphasen, HRV, Hauttemperatur — automatisch mit subjektiven Symptomen korreliert.</div>
+        <span class="feature-tag">5+ Geräte</span>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon feature-icon-amber">🌬️</div>
+        <div class="feature-title">Hitzewall-Soforthilfe</div>
+        <div class="feature-desc">Paced Breathing (6 Atemzüge/Min.) — die einzige nicht-pharmakologische Intervention mit konsistenter RCT-Evidenz. Direkt via Widget, ohne App zu öffnen.</div>
+        <span class="feature-tag feature-tag-terra">Sofort wirksam</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION: PERSONAS ════════════════════════════ -->
+<section class="section-personas">
+  <div class="personas-header reveal">
+    <p class="section-label">Für wen</p>
+    <h2>Morphea kennt<br><em>deine</em> Geschichte.</h2>
+  </div>
+
+  <div class="personas-grid reveal">
+    <div class="persona-card">
+      <p class="persona-age">Perimenopause · 44–50</p>
+      <p class="persona-name">Die Aktive</p>
+      <p class="persona-role">Sandra, 44 · Sportlich, datenaffin</p>
+      <p class="persona-quote">"Ich möchte verstehen was in meinem Körper passiert — bevor die Symptome schlimmer werden."</p>
+      <div class="persona-tags">
+        <span class="persona-tag">Wearables</span>
+        <span class="persona-tag">Prävention</span>
+        <span class="persona-tag">Tracking</span>
+        <span class="persona-tag">Herz & Knochen</span>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <p class="persona-age">Menopause · 48–55</p>
+      <p class="persona-name">Die Managerin</p>
+      <p class="persona-role">Petra, 49 · Berufstätig, hohe Belastung</p>
+      <p class="persona-quote">"Hitzewallungen mitten im Meeting. Ich brauche Daten, keine Ratschläge — und einen Bericht für meine Ärztin."</p>
+      <div class="persona-tags">
+        <span class="persona-tag">Arzt-Bericht</span>
+        <span class="persona-tag">KI-Insights</span>
+        <span class="persona-tag">Evidenz</span>
+        <span class="persona-tag">DiGA</span>
+      </div>
+    </div>
+
+    <div class="persona-card">
+      <p class="persona-age">Postmenopause · 52–65</p>
+      <p class="persona-name">Die Suchende</p>
+      <p class="persona-role">Monika, 53 · Ganzheitlich denkend</p>
+      <p class="persona-quote">"Ich will keine Hormone. Ich suche einen Weg der zu mir passt — mit echter Substanz dahinter."</p>
+      <div class="persona-tags">
+        <span class="persona-tag">Ohne HRT</span>
+        <span class="persona-tag">Achtsamkeit</span>
+        <span class="persona-tag">CBT</span>
+        <span class="persona-tag">Community</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION: EVIDENCE ════════════════════════════ -->
+<section class="section-evidence">
+  <div class="evidence-inner reveal">
+    <div class="evidence-left">
+      <p class="section-label">Evidenz</p>
+      <h2>Kein Wellness-<br>Versprechen.<br><em>Klinische Realität.</em></h2>
+      <p>
+        Morphea basiert ausschließlich auf publizierten, peer-reviewed Studien und Leitlinien. Keine Behauptungen ohne Beleg. Keine Black-Box-Empfehlungen. Transparenz ist Souveränität.
+      </p>
+      <div class="evidence-sources">
+        <div class="evidence-source"><div class="evidence-source-dot"></div>Caria RCT 2025 — CBT für Menopause</div>
+        <div class="evidence-source"><div class="evidence-source-dot"></div>NAMS Level-1-Evidenz für CBT</div>
+        <div class="evidence-source"><div class="evidence-source-dot"></div>Frieda Menova Pilot 2025</div>
+        <div class="evidence-source"><div class="evidence-source-dot"></div>Health & Her BMJ Open 2023</div>
+        <div class="evidence-source"><div class="evidence-source-dot"></div>Morin 1993 — CBTI Schlaf</div>
+        <div class="evidence-source"><div class="evidence-source-dot"></div>Daley 2015 Meta-Analyse Bewegung</div>
+      </div>
+    </div>
+    <div class="outcomes-grid">
+      <div class="outcome-card">
+        <div class="outcome-num" style="color:var(--amethyst);">≥30%</div>
+        <div class="outcome-label">Reduktion Hitzewallungen nach 12W CBT (HFRS)</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-num" style="color:var(--sage);">+3 Pkt</div>
+        <div class="outcome-label">Verbesserung Schlafqualität (PSQI-Score)</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-num" style="color:var(--terra);">≥4 Pkt</div>
+        <div class="outcome-label">PHQ-8 Reduktion (Depression & Stimmung)</div>
+      </div>
+      <div class="outcome-card">
+        <div class="outcome-num" style="color:var(--amber);">70%</div>
+        <div class="outcome-label">Nutzerinnen wöchentlich aktiv nach 8W (Ziel)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION: HOW IT WORKS ════════════════════════ -->
+<section class="section-how">
+  <h2 class="reveal">So funktioniert<br>die <em>Transformation.</em></h2>
+
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Dein persönliches Profil</h3>
+        <p>5–8 Minuten Onboarding. Karten-Swipe, keine langen Formulare. Deine Phase (Peri/Meno/Post), deine Top-3-Symptome, deine Ziele. Sofortiger personalisierter Startplan.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Tägliches Tracking — 2 Minuten</h3>
+        <p>Morgens Schlaf, tagsüber Hitzewall-Widget, abends 5 Emojis für Stimmung. Voice-Input wenn du keine Zeit hast. Die KI lernt deine Muster — du musst nichts analysieren.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Dein 12-Wochen-Programm</h3>
+        <p>10–15 Minuten täglich. Audio-Übungen, interaktive Worksheets, Animationen. Woche 1–4: Hitzewallungen & Schlaf. Woche 5–8: Stimmung & Ernährung. Woche 9–12: Langzeitstrategie.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>KI-Insights & Arzt-Bericht</h3>
+        <p>Jede Woche: ein personalisierter Einblick. Vor dem Arzttermin: Ein-Tap PDF-Export mit allen validierten Scores. Deine Ärztin sieht in 3 Minuten was 12 Wochen zeigen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION: PRICING ════════════════════════════ -->
+<section class="section-pricing">
+  <div class="pricing-inner">
+    <div class="pricing-header reveal">
+      <p class="section-label">Preise</p>
+      <h2>Einfach. Klar.<br><em>Ohne Überraschungen.</em></h2>
+      <p>Alle Preise inklusive MwSt. · Keine versteckten Gebühren · Kündigung jederzeit · Datenschutz</p>
+    </div>
+
+    <div class="pricing-grid reveal">
+      <!-- Free -->
+      <div class="price-card">
+        <p class="price-tier">Free</p>
+        <div class="price-amount">0 <span>€</span></div>
+        <p class="price-period">/ Monat — für immer</p>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Basis Symptom-Tracking (7 Symptome)</li>
+          <li>Woche 1 CBT-Programm kostenlos</li>
+          <li>Paced Breathing Soforthilfe</li>
+          <li>Tägliche Tipps (5 Kategorien)</li>
+          <li>Basis-Insights (7 Tage)</li>
+          <li>20 Infothek-Artikel</li>
+        </ul>
+        <button class="price-cta price-cta-secondary">Kostenlos starten</button>
+      </div>
+
+      <!-- Premium -->
+      <div class="price-card featured">
+        <p class="price-tier">Premium</p>
+        <div class="price-amount">12,99 <span>€</span></div>
+        <p class="price-period">/ Monat · 89 €/Jahr (43% Ersparnis)</p>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li>Vollständiges 12-Wochen CBT-Programm</li>
+          <li>Unbegrenztes Tracking + Voice-Input</li>
+          <li>KI-Insights & Mustererkennung</li>
+          <li>Arzt-Bericht PDF-Export</li>
+          <li>Wearable-Integration (alle Geräte)</li>
+          <li>100+ Artikel Infothek</li>
+          <li>KI-Begleiterin (Chat)</li>
+          <li>Community-Zugang</li>
+        </ul>
+        <button class="price-cta price-cta-primary" onclick="scrollToWaitlist()">Auf Warteliste →</button>
+      </div>
+
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION: PARTNER BENACHRICHTIGUNG ════════════ -->
+<section class="section-partner">
+  <div class="partner-inner reveal">
+
+    <!-- LEFT: Explanation -->
+    <div class="partner-left">
+      <p class="section-label">Für den Mann daneben</p>
+      <h2>Er will helfen.<br>Er weiß nur<br>nicht <em>wie.</em></h2>
+      <p>
+        Die Wechseljahre sind kein Thema das Frauen alleine durchleben sollten. Aber Partner verstehen oft nicht, was biologisch passiert — und fühlen sich hilflos. Morphea schließt diese Lücke.
+      </p>
+      <div class="partner-quote">
+        "Mein Mann dachte ich wäre einfach gereizt. Er wusste nicht, dass ich nachts dreimal aufgewacht bin und Herzrasen hatte."
+      </div>
+      <p>
+        Mit der Partner-Benachrichtigung erhält dein Partner automatische, einfühlsame Updates — mit medizinischer Erklärung und konkreten Tipps wie er heute helfen kann. Kein Medizinstudium nötig.
+      </p>
+    </div>
+
+    <!-- RIGHT: Feature Card -->
+    <div class="partner-notify-card">
+      <div class="partner-notify-header">
+        <div class="partner-notify-icon">💌</div>
+        <div>
+          <div class="partner-notify-title">Partner-Benachrichtigung</div>
+          <div class="partner-notify-sub">Premium Feature · Optional</div>
+        </div>
+      </div>
+
+      <div class="partner-steps">
+        <div class="partner-step">
+          <div class="partner-step-num">1</div>
+          <div class="partner-step-text">
+            <strong>Kontakt hinterlegen</strong> — Handynummer oder E-Mail des Partners. Jederzeit änderbar, vollständig optional.
+          </div>
+        </div>
+        <div class="partner-step">
+          <div class="partner-step-num">2</div>
+          <div class="partner-step-text">
+            <strong>Intervall wählen</strong> — Wann soll er benachrichtigt werden?
+            <div class="interval-pills">
+              <span class="interval-pill active" onclick="selectPill(this, 'msg-phase')">Jede Zyklusphase</span>
+              <span class="interval-pill" onclick="selectPill(this, 'msg-daily')">Täglich</span>
+              <span class="interval-pill" onclick="selectPill(this, 'msg-symptoms')">Bei starken Symptomen</span>
+              <span class="interval-pill" onclick="selectPill(this, 'msg-period')">Erste Blutung</span>
+            </div>
+          </div>
+        </div>
+        <div class="partner-step">
+          <div class="partner-step-num">3</div>
+          <div class="partner-step-text">
+            <strong>Er bekommt</strong> — Eine kurze, empathische Nachricht. Was gerade biologisch passiert. Ein konkreter Tipp für heute.
+          </div>
+        </div>
+      </div>
+
+      <!-- Message Preview -->
+      <div class="partner-preview-msg">
+        <p class="partner-preview-label">Beispiel-Nachricht an deinen Partner</p>
+        <div class="partner-msg-bubble" id="msg-phase">
+          <p class="partner-msg-from">Morphea · Für dich als Partner</p>
+          <p class="partner-msg-text" id="msg-text">
+            "Sarah ist gerade in der Lutealphase ihres Zyklus. In dieser Phase sinkt Progesteron — das kann Reizbarkeit, Schlafprobleme und Hitzewallungen verstärken. Das ist biologisch, kein Zeichen von Stress oder Unzufriedenheit."
+          </p>
+          <div class="partner-msg-tip" id="msg-tip">
+            <strong>💡 Tipp für heute:</strong> Weniger nachfragen, mehr Raum geben. Ein ruhiger Abend gemeinsam — ohne Erwartungen — wirkt stärker als jede Ablenkung.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ SECTION: FINAL CTA ════════════════════════════ -->
+<section class="section-cta" id="waitlist">
+  <div class="cta-inner reveal">
+    <p class="cta-eyebrow">Warteliste · Launch 2026</p>
+    <h2 class="cta-title">Bereit für<br>deine <em>Morphosis?</em></h2>
+    <p class="cta-sub">
+      11 Millionen Frauen in Deutschland warten auf eine Lösung die sie ernst nimmt. Du musst nicht länger warten.
+    </p>
+
+    <div class="waitlist-form" id="cta-form">
+      <input type="email" class="waitlist-input" placeholder="deine@email.de" id="cta-email">
+      <button class="waitlist-btn" onclick="joinWaitlist('cta-email', 'cta-success')">Jetzt vormerken →</button>
+    </div>
+    <div class="form-success" id="cta-success">
+      <p>🖤 Du bist dabei. Die Morphosis beginnt.</p>
+    </div>
+
+    <p class="hero-microcopy" style="margin-top:1rem;">Kostenlos · Keine Verpflichtung · Kündigung jederzeit</p>
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════ -->
+<footer>
+  <div class="footer-left">
+    Morphea · by JRavens Lab<br>
+    Sigmaringen, Germany · 2026<br>
+    Evidenzbasiert · CBT Level 1 · Datenschutz
+  </div>
+  <div style="display:flex; gap:2rem; align-items:center;">
+    <a href="#impressum" style="font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.2); text-decoration:none;">Impressum</a>
+    <a href="#datenschutz" style="font-family:var(--font-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.2); text-decoration:none;">Datenschutz</a>
+    <div class="footer-right">The Open Road begins here.</div>
+  </div>
+</footer>
+
+<!-- ══ SCRIPTS ════════════════════════════════════════ -->
+<script>
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // Waitlist form
+  function joinWaitlist(inputId, successId) {
+    const input = document.getElementById(inputId);
+    const success = document.getElementById(successId);
+    const form = input.closest('.waitlist-form');
+
+    if (!input.value || !input.value.includes('@')) {
+      input.style.boxShadow = '0 0 0 2px rgba(200,99,58,0.5)';
+      input.focus();
+      setTimeout(() => input.style.boxShadow = '', 2000);
+      return;
+    }
+
+    form.style.display = 'none';
+    success.classList.add('visible');
+
+    // In production: send to your backend / Brevo / Mailchimp
+    console.log('Waitlist signup:', input.value);
+  }
+
+  // Scroll to waitlist
+  function scrollToWaitlist() {
+    document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
+  }
+
+
+  // Partner interval pill selector
+  const messages = {
+    'msg-phase': {
+      text: '"Sarah ist gerade in der Lutealphase ihres Zyklus. In dieser Phase sinkt Progesteron — das kann Reizbarkeit, Schlafprobleme und Hitzewallungen verstärken. Das ist biologisch, kein Zeichen von Stress oder Unzufriedenheit."',
+      tip: '<strong>💡 Tipp für heute:</strong> Weniger nachfragen, mehr Raum geben. Ein ruhiger Abend gemeinsam — ohne Erwartungen — wirkt stärker als jede Ablenkung.'
+    },
+    'msg-daily': {
+      text: '"Heute hat Sarah 2 Hitzewallungen geloggt (Intensität Ø 5/10) und 6,2 Stunden geschlafen. Im Vergleich zur letzten Woche ist das eine leichte Verbesserung beim Schlaf."',
+      tip: '<strong>💡 Tipp für heute:</strong> Frag sie heute Abend wie es ihr geht — aber ohne Druck. Manchmal ist einfaches Zuhören das Wertvollste.'
+    },
+    'msg-symptoms': {
+      text: '"Sarah hat heute starke Hitzewallungen geloggt. Hitzewallungen entstehen durch Östrogenschwankungen, die den Thermoregulations-Mechanismus im Gehirn beeinflussen. Sie dauern meist 1–5 Minuten."',
+      tip: '<strong>💡 Tipp für heute:</strong> Kühles Wasser bereitstellen, keine Wärme-Umarmungen im Moment. Frag ob sie etwas braucht — und akzeptiere wenn die Antwort Nein ist.'
+    },
+    'msg-period': {
+      text: '"Sarahs erste Blutung nach der Menopause-Übergangsphase. In der Perimenopause können Zyklen unregelmäßig werden — das ist normal und bedeutet keinen medizinischen Notfall."',
+      tip: '<strong>💡 Tipp für heute:</strong> Wärmflasche, Ruhe, und vielleicht ihre Lieblingssuppe. Keine große Geste nötig — Präsenz reicht.'
+    }
+  };
+
+  function selectPill(el, msgKey) {
+    document.querySelectorAll('.interval-pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+    const msg = messages[msgKey];
+    if (msg) {
+      document.getElementById('msg-text').innerHTML = msg.text;
+      document.getElementById('msg-tip').innerHTML = msg.tip;
+    }
+  }
+
+  // Nav background on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      nav.style.background = 'rgba(11,15,25,0.97)';
+    } else {
+      nav.style.background = 'linear-gradient(to bottom, rgba(11,15,25,0.95) 0%, transparent 100%)';
+    }
+  });
+</script>
+
+</body>
+</html>
